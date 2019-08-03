@@ -2,6 +2,7 @@
 
 import os
 import sys
+from msbase.subprocess_ import try_call_std
 from termcolor import cprint
 
 src = sys.argv[1]
@@ -11,6 +12,22 @@ def runcmd(cmd):
     if code != 0:
         cprint("FAILED: " + cmd, "red")
         sys.exit(code)
+
+#:/Users/zhen/projects/runpy/.venv/lib/python37.zip:/Users/zhen/projects/runpy/.venv/lib/python3.7:/Users/zhen/projects/runpy/.venv/lib/python3.7/lib-dynload:/anaconda3/lib/python3.7:/Users/zhen/projects/runpy/.venv/lib/python3.7/site-packages
+def is_okay_syspath(s):
+    if s == "":
+        return False
+    if ".zip" in s:
+        return False
+    if "/lib/python3" in s:
+        return False
+    return True
+
+stdout, _, _ = try_call_std(["python", "-c", "import sys; print(':'.join(sys.path))"], verbose=False)
+syspath = stdout.strip().split(":")
+syspath = ":".join([ s for s in syspath if is_okay_syspath(s)])
+
+os.environ['MYPYPATH'] = syspath
 
 runcmd("mypy " + src)
 runcmd("python3 " + " ".join(sys.argv[1:]))
