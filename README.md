@@ -24,6 +24,7 @@ https://github.com/izgzhen/runpy/releases
 # for linux
 wget https://github.com/izgzhen/runpy/releases/download/v0.1/runpy-linux
 sudo mv runpy-linux /usr/local/bin/runpy
+sudo chmod a+x /usr/local/bin/runpy
 ```
 
 ## Build
